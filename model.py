@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class Todo(BaseModel):
     id: int
@@ -17,5 +18,20 @@ class TodoItem(BaseModel):
         json_schema_extra = {
             "example": {
                 "item": "Buy Biscuits"
+            }
+        }
+class TodoItems(BaseModel):
+    todos: List[TodoItem]
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "todos": [
+                    {
+                        "item": "Buy Biscuits"
+                    },
+                    {
+                        "item": "Buy Cucumber"
+                    }
+                ]
             }
         }
