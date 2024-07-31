@@ -1,21 +1,61 @@
+from typing import List, Optional
+from fastapi import Form
 from pydantic import BaseModel
 
-class Todo(BaseModel):
-    id: int
+
+class TodoBase(BaseModel):
     item: str
+
     class Config:
-        json_schema_extra = {
+        schema_extra = {
             "example": {
-                "id": 1,
-                "item": "Write shopping list"
+                "item": "Example item!"
             }
         }
-        
-class TodoItem(BaseModel):
-    item: str
+
+class TodoCreate(TodoBase):
+    @classmethod
+    def as_form(
+        cls,
+        item: str = Form(...)
+    ):
+        return cls(item=item)
+
+
+class TodoItem(TodoBase):
+    id: Optional[int] = None
+
+    @classmethod
+    def as_form(
+        cls,
+        item: str = Form(...)
+    ):
+        return cls(item=item)
+
     class Config:
-        json_schema_extra = {
+        schema_extra = {
             "example": {
-                "item": "Buy Biscuits"
+                "id": 1,
+                "item": "Example item!"
+            }
+        }
+
+
+class TodoItems(BaseModel):
+    todos: List[TodoItem]
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "todos": [
+                    {
+                        "id": 1,
+                        "item": "Example item 1!"
+                    },
+                    {
+                        "id": 2,
+                        "item": "Example item 2!"
+                    }
+                ]
             }
         }
